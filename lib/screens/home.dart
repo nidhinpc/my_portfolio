@@ -17,26 +17,31 @@ class HomeScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Hero Section
             Container(
               padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
               child: Column(
                 children: [
-                  // Your Photo with Animation
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(100), // Circular photo
-                    child: Image.asset(
-                      'assets/images/profile.jpg', // Path to your photo
-                      width: 150, // Adjust the size
-                      height: 150,
-                      fit: BoxFit.cover, // Ensure the photo fits
-                    ),
-                  )
-                      .animate() // Start animation
-                      .fadeIn(duration: 500.ms) // Fade in animation
-                      .scale(delay: 300.ms) // Scale animation
-                      .then(delay: 300.ms), // Delay before next animation
+                  // Your Photo with Animation and MouseRegion
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click, // Change cursor on hover
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(100), // Circular photo
+                      child: Image.asset(
+                        'assets/images/profile.jpg', // Path to your photo
+                        width: 150, // Adjust the size
+                        height: 150,
+                        fit: BoxFit.cover, // Ensure the photo fits
+                      ),
+                    )
+                        .animate() // Start animation
+                        .fadeIn(duration: 500.ms) // Fade in animation
+                        .scale(delay: 300.ms) // Scale animation
+                        .then(delay: 300.ms), // Delay before next animation
+                  ),
 
                   const SizedBox(height: 20),
 
@@ -78,6 +83,8 @@ class HomeScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      backgroundColor: Colors.blue, // Button color
+                      foregroundColor: Colors.white, // Text color
                     ),
                     child: const Text('Get in Touch'),
                   )
@@ -89,7 +96,13 @@ class HomeScreen extends StatelessWidget {
             ),
 
             // Footer
-            const Footer(),
+            const Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Footer(),
+              ],
+            ),
           ],
         ),
       ),
