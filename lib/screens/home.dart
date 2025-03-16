@@ -10,102 +10,122 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    bool isMobile = screenSize.width < 768; // Define breakpoint for mobile
+
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(60),
         child: NavBar(),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Hero Section
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
-              child: Column(
-                children: [
-                  // Your Photo with Animation and MouseRegion
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click, // Change cursor on hover
-                    child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(100), // Circular photo
-                      child: Image.asset(
-                        'assets/images/profile.jpg', // Path to your photo
-                        width: 150, // Adjust the size
-                        height: 150,
-                        fit: BoxFit.cover, // Ensure the photo fits
-                      ),
-                    )
-                        .animate() // Start animation
-                        .fadeIn(duration: 500.ms) // Fade in animation
-                        .scale(delay: 300.ms) // Scale animation
-                        .then(delay: 300.ms), // Delay before next animation
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Animated Text with flutter_animate
-                  custom.AnimatedText(
-                    text: 'Nidhin PC',
-                    style: Theme.of(context).textTheme.headlineMedium!,
-                  )
-                      .animate() // Start animation
-                      .fadeIn(duration: 500.ms) // Fade in animation
-                      .slideY(begin: -0.5, end: 0) // Slide from top
-                      .then(delay: 300.ms), // Delay before next animation
-
-                  const SizedBox(height: 20),
-
-                  // Animated Text with animated_text_kit
-                  AnimatedTextKit(
-                    animatedTexts: [
-                      TyperAnimatedText(
-                        'Flutter Developer | UI/UX Enthusiast',
-                        textStyle: Theme.of(context).textTheme.bodyLarge!,
-                        speed: const Duration(milliseconds: 50),
-                      ),
-                    ],
-                    isRepeatingAnimation: true, // Loop the animation
-                    totalRepeatCount: 3, // Repeat 3 times
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  // Animated Button
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add your action here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      backgroundColor: Colors.blue, // Button color
-                      foregroundColor: Colors.white, // Text color
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+          child: isMobile
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: _buildContent(),
+                )
+              : Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: _buildProfileImage(),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: _buildTextContent(),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: const Text('Get in Touch'),
-                  )
-                      .animate() // Start animation
-                      .scale(delay: 1000.ms) // Scale animation
-                      .then(delay: 300.ms), // Delay before next animation
-                ],
-              ),
-            ),
-
-            // Footer
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Footer(),
-              ],
-            ),
-          ],
+                    const Footer(),
+                  ],
+                ),
         ),
       ),
     );
+  }
+
+  List<Widget> _buildContent() {
+    return [
+      _buildProfileImage(),
+      const SizedBox(height: 20),
+      ..._buildTextContent(),
+    ];
+  }
+
+  Widget _buildProfileImage() {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: Image.asset(
+          'assets/images/profile.jpg',
+          width: 150,
+          height: 150,
+          fit: BoxFit.cover,
+        ),
+      )
+          .animate()
+          .fadeIn(duration: 500.ms)
+          .scale(delay: 300.ms)
+          .then(delay: 300.ms),
+    );
+  }
+
+  List<Widget> _buildTextContent() {
+    return [
+      custom.AnimatedText(
+        text: 'Nidhin PC',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 45,
+          fontWeight: FontWeight.bold,
+        ),
+      )
+          .animate()
+          .fadeIn(duration: 500.ms)
+          .slideY(begin: -0.5, end: 0)
+          .then(delay: 300.ms),
+      const SizedBox(height: 20),
+      AnimatedTextKit(
+        animatedTexts: [
+          TyperAnimatedText(
+            'Flutter Developer',
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 45,
+              fontWeight: FontWeight.bold,
+            ),
+            speed: const Duration(milliseconds: 50),
+          ),
+        ],
+        isRepeatingAnimation: true,
+        totalRepeatCount: 3,
+      ),
+      const SizedBox(height: 40),
+      ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+        ),
+        child: const Text('Get in Touch'),
+      ).animate().scale(delay: 1000.ms).then(delay: 300.ms),
+      const SizedBox(height: 40),
+    ];
   }
 }
